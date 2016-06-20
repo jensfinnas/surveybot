@@ -1,0 +1,44 @@
+[
+    {
+        "body": "Would you like to visualize your data?",
+        "responses": [
+            {
+                "user_inputs": [
+                    "Yes",
+                    "yep",
+                    "ja"
+                ],
+                "next_statement": 1
+            },
+            {
+                "user_inputs": ["No", "n", "nej"],
+                "next_statement": 2
+            }
+        ]
+    },
+    {
+        "body": "We like charts too :) Do you have tabular data?",
+        "responses": [
+            {
+                "user_inputs": [
+                    "Yes",
+                    "yep",
+                    "ja"
+                ],
+                "next_statement": 3
+            },
+            {
+                "user_inputs": ["No"],
+                "next_statement": 2
+            }
+        ]
+    },
+    {
+        "body": "Never mind then,",
+        "responses": []
+    },
+    {
+        "body": "Call J++",
+        "responses": []
+    }
+]
