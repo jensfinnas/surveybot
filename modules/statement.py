@@ -32,7 +32,12 @@ class Statement(object):
         for response in self.responses:
             response._validate(surveybot, self)
 
-    
+    def in_tree(self):
+        """ Is this statement part of the tree?
+            A statement can also be some kind of error message 
+        """
+        return not self.id == None
+
     def interpret(self, user_input):
         """ Look for a matching response to the user input
         """
