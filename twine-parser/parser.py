@@ -35,14 +35,23 @@ for statement in statements:
 	statement_id = statement["id"]
 	passage = soup.find("tw-passagedata", {"pid": statement_id})
 	passage_text = passage.text
-	statements[statement_counter]["body"] = passage_text.split('\n\n')[0]
+	statement_body = passage_text.split('\n\n')[0]
+	statement_image = re.findall("\{\{([\w\.-]+)\}\}", statement_body, flags=re.MULTILINE)
+	statement_body = re.sub("(\{\{[\w\.-]+\}\})", "", statement_body, flags=re.MULTILINE)
+	statements[statement_counter]["body"] = statement_body.strip()
+	if statement_image != []:
+		statements[statement_counter]["image"] = str(statement_image[0])
 
 	statements[statement_counter]["responses"] = []
 	for brackets in re.findall("\[\[(.*?)\]\]", passage_text, flags=re.MULTILINE):
 		answer = {}
 		answer["user_inputs"] = []
-		answer["user_inputs"].append(brackets.split('->')[0])
-		answer_name = brackets.split('->')[1]
+		if "->" in brackets:
+			answer["user_inputs"].append(brackets.split('->')[0])
+			answer_name = brackets.split('->')[1]
+		else:
+			answer["user_inputs"].append(brackets)
+			answer_name = brackets
 		# finds the id of the answser
 		for statement_copy in statements_copy:
 			if statement_copy["name"] == answer_name:
