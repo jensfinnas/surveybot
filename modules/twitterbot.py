@@ -22,6 +22,7 @@ class TwitterBot(SurveyBot):
         auth.set_access_token(access_token, access_token_secret)
 
         self.twitter = tweepy.API(auth)
+        self.twitter_handle = self.twitter.me().screen_name
 
     def say(self, statement, *args, **kwargs):
         """ Make a status update.
@@ -85,7 +86,7 @@ class TwitterBot(SurveyBot):
         # Get the previous tweets of the bot in the conversation 
         while status.in_reply_to_status_id:
             status = self.twitter.get_status(status.in_reply_to_status_id)
-            if status.user.screen_name == u'askchartbot':
+            if status.user.screen_name == self.twitter_handle:
                 status_history.append(status)
         
         for status in reversed(status_history):
@@ -106,7 +107,7 @@ class TwitterBot(SurveyBot):
         return len([x for x in self.timeline if x.in_reply_to_status_id == user_status.id]) > 0
 
     def react_to_mention(self, status):
-        if status.in_reply_to_screen_name == u'askchartbot':
+        if status.in_reply_to_screen_name == self.twitter_handle:
             # Someone responded to me!
             self.reply(status)
             

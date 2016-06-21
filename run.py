@@ -14,5 +14,5 @@ x = TwitterBot("twine-parser/result.json",
 
 mentionlistener = MentionListener
 myStream = tweepy.Stream(auth = x.twitter.auth, listener=mentionlistener(x))
-myStream.filter(track=['askchartbot'])
+myStream.filter(track=[x.twitter_handle])
 
