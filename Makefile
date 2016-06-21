@@ -6,6 +6,9 @@ pip:
 
 install: venv pip
 
+run:
+	. venv/bin/activate ; python example.py
+
 docker-build:
 	docker build -t surveybot .
 

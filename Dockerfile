@@ -1,3 +1,3 @@
-FROM python:2.7-onbuild
+FROM heroku/python
 
 CMD [ "python", "./example.py" ]
