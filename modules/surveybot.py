@@ -32,7 +32,7 @@ class SurveyBot(object):
         self.say(self.statements[0])
 
     def say(self, statement):
-        print statement.body
+        print "#%s: %s" % (statement.id, statement.body) 
         if not statement.is_last:
             user_input = raw_input()
             resp = statement.interpret(user_input)
@@ -41,4 +41,5 @@ class SurveyBot(object):
 
             elif isinstance(resp, Response):
                 if resp.next_statement:
-                    self.say(self.statements[resp.next_statement])
+                    next_statement = self._get_statement(resp.next_statement)
+                    self.say(next_statement)
