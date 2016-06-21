@@ -12,7 +12,9 @@ class Response(object):
 
         # Make sure that next statement is a valid statement id
         # Will throw en error if id is faulty
-        surveybot._get_statement(self.next_statement)
+        _statement = surveybot._get_statement_by_id(self.next_statement)
+        if not _statement:
+            raise ValueError("{} is not a valid statement_id".format(self.next_statement))
 
     def match(self,user_input):
         """ Check if the user input matches any of the allowed inputs
