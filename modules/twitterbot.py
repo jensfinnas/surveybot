@@ -6,7 +6,7 @@ import re
 import pdb
 
 class TwitterBot(SurveyBot):
-    """ A twitter 
+    """ A twitter implementation of the Survey Bot
     """
     def __init__(self,
         statement_tree_source,
@@ -26,7 +26,7 @@ class TwitterBot(SurveyBot):
 
     def say(self, statement, *args, **kwargs):
         """ Make a status update.
-            Pass 
+            Pass a status object as 'reply_to' argument to make it a reply
         """
         user = ""
         in_reply_to_status_id = None
@@ -49,8 +49,11 @@ class TwitterBot(SurveyBot):
     def reply(self, user_status):
         """ Reply to a tweet by a user
         """
-        if not self._has_reply(user_status) and not user_status.user.screen_name == u"askchartbot":
-            # What was the previous statement of the bot?
+
+        # Make sure that the bot has not already responded to the status
+        # Also (hackish) don't reply to own tweets. Prevents infinite loops that has occured.
+        if not self._has_reply(user_status) and not user_status.user.screen_name == self.twitter_handle:
+            # Get conversation history
             statement_history = self._get_statement_history(user_status)
             if len(statement_history) > 0:
                 last_statement = statement_history[-1]
@@ -58,18 +61,23 @@ class TwitterBot(SurveyBot):
                 user_input = self._clean_tweet(user_status.text)
                 resp = last_statement.interpret(user_input)
 
+                # Was not able to interpret the response
                 if isinstance(resp, Statement):
                     self.say(resp, reply_to=user_status)
 
+                # ...was able to interpret:
                 elif isinstance(resp, Response):
                     if resp.next_statement:
                         next_statement = self._get_statement_by_id(resp.next_statement)
                         self.say(next_statement, reply_to=user_status)
             else:
+                # Start a new conversation if there were no valid statements 
                 self.start_conversation(reply_to=user_status)
 
 
     def _clean_tweet(self, tweet_text):
+        """ Remove disturbing text from tweets (ie handles)
+        """
         # Remove twitter handles 
         tweet_text = re.sub("@([A-Za-z]+[A-Za-z0-9]+)", '', tweet_text)
 
@@ -107,8 +115,10 @@ class TwitterBot(SurveyBot):
         return len([x for x in self.timeline if x.in_reply_to_status_id == user_status.id]) > 0
 
     def react_to_mention(self, status):
+        """ To be run when the bot is mentioned
+        """
         if status.in_reply_to_screen_name == self.twitter_handle:
-            # Someone responded to me!
+            # This is an ongoing conversation
             self.reply(status)
             
         else:

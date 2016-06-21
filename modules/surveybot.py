@@ -5,10 +5,14 @@ from response import Response
 import os
 
 class SurveyBot(object):
+    """ 
+    """
     def __init__(self, statement_tree_source, image_folder=""):
-        """ statement_tree_source is the decision tree by which the bot will act
+        """ statement_tree_source : the decision tree by which the bot will act
+            image_folder : relative path to folder with images
         """
 
+        # Parse JSON tree with statements
         with open(statement_tree_source) as json_file:
             self.statements = []
             for item in json.load(json_file):
@@ -56,6 +60,8 @@ class SurveyBot(object):
             return None
     
     def start_conversation(self, *args, **kwargs):
+        """ Make the first statement
+        """
         self.say(self.statements[0], *args, **kwargs)
         
 

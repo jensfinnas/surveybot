@@ -4,6 +4,9 @@ import tweepy
 
 class MentionListener(tweepy.StreamListener):
     def __init__(self, surveybot):
+        """ Override the default init so that our survey bot is available
+            for action when it is mentioned.
+        """
         super(MentionListener, self).__init__()
         self.surveybot = surveybot
 
