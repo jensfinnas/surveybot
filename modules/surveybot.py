@@ -35,9 +35,7 @@ class SurveyBot(object):
             statement._validate(self)
             
             if statement.image:
-                try:
-                    os.path.isfile(statement.image) 
-                except:
+                if not os.path.isfile(statement.image):
                     raise ValueError("Can't find image {}".format(statement.image))
 
     def _get_statement_by_id(self, statement_id):
