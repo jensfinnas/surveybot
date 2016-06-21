@@ -5,10 +5,11 @@ from response import Response
 class Statement(object):
     """ Represents a single thing that the bot says.
     """
-    def __init__(self, body, responses=[]):
+    def __init__(self, body, id=None, responses=[]):
         if not isinstance(responses, list):
             raise ValueError("The statement should come with a LIST of possible user responses.")
 
+        self.id = id
         self.body = body
         self.responses = []
 
@@ -26,7 +27,8 @@ class Statement(object):
         
 
     def _validate(self, surveybot):
-        # Validate responses
+        """ Make sure that every response links to valid statements
+        """
         for response in self.responses:
             response._validate(surveybot, self)
 

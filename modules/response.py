@@ -10,9 +10,9 @@ class Response(object):
         if not isinstance(self.next_statement, int):
             raise ValueError("{} should have an integer value as next_statement".format(statement))
 
-        # Make sure that next statement is valid
-        if self.next_statement >= len(surveybot.statements):
-            raise ValueError("next_statement {} for '{}' is out of range. There are only {} statements this bot.".format(self.next_statement, statement.body, len(surveybot.statements)))
+        # Make sure that next statement is a valid statement id
+        # Will throw en error if id is faulty
+        surveybot._get_statement(self.next_statement)
 
     def match(self,user_input):
         """ Check if the user input matches any of the allowed inputs
