@@ -16,4 +16,4 @@ docker-run:
 	docker run -it surveybot
 
 deploy:
-	heroku container:push worker -a askchartbot
+	git push https://git.heroku.com/askchartbot.git
