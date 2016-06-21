@@ -38,7 +38,7 @@ class SurveyBot(object):
                 try:
                     os.path.isfile(statement.image) 
                 except:
-                    print statement.image
+                    raise ValueError("Can't find image {}".format(statement.image))
 
     def _get_statement_by_id(self, statement_id):
         """ Get a statement by id

@@ -6,6 +6,8 @@ import re
 import pdb
 
 class TwitterBot(SurveyBot):
+    """ A twitter 
+    """
     def __init__(self,
         statement_tree_source,
         image_folder="",
@@ -46,7 +48,7 @@ class TwitterBot(SurveyBot):
     def reply(self, user_status):
         """ Reply to a tweet by a user
         """
-        if not self._has_reply(user_status):
+        if not self._has_reply(user_status) and not user_status.user.screen_name == u"askchartbot":
             # What was the previous statement of the bot?
             statement_history = self._get_statement_history(user_status)
             if len(statement_history) > 0:
