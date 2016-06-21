@@ -5,6 +5,7 @@ from config import access_token, access_token_secret, consumer_key, consumer_sec
 import tweepy
 
 x = TwitterBot("twine-parser/result.json",
+    image_folder="assets/images/",
     access_token=access_token,
     access_token_secret=access_token_secret,
     consumer_key=consumer_key,
@@ -21,6 +22,10 @@ for mention in reversed(mentions):
 
 """
 
+x.say(x.statements[-2])
+
+"""
 mentionlistener = MentionListener
 myStream = tweepy.Stream(auth = x.twitter.auth, listener=mentionlistener(x))
 myStream.filter(track=['askchartbot'])
+"""

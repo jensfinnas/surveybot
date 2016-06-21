@@ -8,12 +8,13 @@ import pdb
 class TwitterBot(SurveyBot):
     def __init__(self,
         statement_tree_source,
+        image_folder="",
         access_token=None,
         access_token_secret=None,
         consumer_key=None,
         consumer_secret=None):
 
-        super(TwitterBot, self).__init__(statement_tree_source)
+        super(TwitterBot, self).__init__(statement_tree_source, image_folder=image_folder)
         
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
@@ -34,13 +35,13 @@ class TwitterBot(SurveyBot):
         status_text = user + statement.body
 
         print "**** NEW TWEET ****"
-        print kwargs["reply_to"].user.screen_name
         print status_text
         print "********************"
-        import pdb
-        #pdb.set_trace()
-        self.twitter.update_status(status_text, in_reply_to_status_id=in_reply_to_status_id)
 
+        if statement.image:
+            self.twitter.update_with_media(statement.image, status=status_text, in_reply_to_status_id=in_reply_to_status_id)
+        else:
+            self.twitter.update_status(status_text, in_reply_to_status_id=in_reply_to_status_id)
 
     def reply(self, user_status):
         """ Reply to a tweet by a user

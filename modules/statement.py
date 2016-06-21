@@ -5,13 +5,14 @@ from response import Response
 class Statement(object):
     """ Represents a single thing that the bot says.
     """
-    def __init__(self, body, id=None, responses=[]):
+    def __init__(self, body, id=None, image=None, responses=[]):
         if not isinstance(responses, list):
             raise ValueError("The statement should come with a LIST of possible user responses.")
 
         self.id = id
         self.body = body
         self.responses = []
+        self.image = image
 
         for response in responses:
             if "next_statement" not in response:

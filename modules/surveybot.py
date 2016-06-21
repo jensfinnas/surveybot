@@ -2,15 +2,26 @@
 import json
 from statement import Statement
 from response import Response
+import os
 
 class SurveyBot(object):
-    def __init__(self, statement_tree_source):
+    def __init__(self, statement_tree_source, image_folder=""):
         """ statement_tree_source is the decision tree by which the bot will act
         """
+
         with open(statement_tree_source) as json_file:
             self.statements = []
             for item in json.load(json_file):
-                statement = Statement(item["body"], id=item["id"], responses=item["responses"])
+                if "image" not in item:
+                    image = None
+                else:
+                    image = os.getcwd() + "/" + image_folder + item["image"]
+
+                statement = Statement(item["body"],
+                    id=item["id"],
+                    image=image,
+                    responses=item["responses"])
+
                 self.statements.append(statement)
 
         self._validate()
@@ -18,9 +29,16 @@ class SurveyBot(object):
 
     def _validate(self):
         """ Make sure that all statements are valid (links to valid next statements etc)
+            and images exist
         """
         for statement in self.statements:
             statement._validate(self)
+            
+            if statement.image:
+                try:
+                    os.path.isfile(statement.image) 
+                except:
+                    print statement.image
 
     def _get_statement_by_id(self, statement_id):
         """ Get a statement by id
